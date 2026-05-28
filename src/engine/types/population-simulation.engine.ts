@@ -1,58 +1,24 @@
+import type { Allele } from "../../models/core/allele.interface";
+import type { Locus } from "../../models/core/locus.interface";
 import type {
 	ActiveSimulation,
 	GenerationSnapshot,
 	LocusSnapshot,
-} from "../models/simulation/active-simulation.interface";
-import {
-	type Allele,
-	type IndividualSimulationConfiguration,
-	type Locus,
-	type PopulationSimulationConfiguration,
-	type SimulationConfiguration,
-	SimulationStrategy,
-} from "../models/simulation/simulation.interface";
-
-function simulationEngineFactory(
-	configuration: SimulationConfiguration,
-): SimulationEngine {
-	switch (configuration.strategy) {
-		case SimulationStrategy.POPULATION: {
-			return new PopulationSimulationEngine(configuration);
-		}
-		case SimulationStrategy.INDIVIDUAL: {
-			return new IndividualSimulationEngine(configuration);
-		}
-		default: {
-			const _exhaustiveCheck: never = configuration;
-			throw new Error(
-				`Cannot create Engine for unknown strategy type: ${_exhaustiveCheck} `,
-			);
-		}
-	}
-}
-
-export abstract class BaseSimulationEngine {
-	constructor(protected configuration: SimulationConfiguration) {}
-	abstract proceedToNextGeneration(): void;
-}
-
-export class IndividualSimulationEngine extends BaseSimulationEngine {
-	constructor(protected configuration: IndividualSimulationConfiguration) {
-		super(configuration);
-	}
-
-	proceedToNextGeneration(): void {}
-}
+} from "../../models/simulation/active-simulation.interface";
+import type { PopulationSimulationConfiguration } from "../../models/simulation/simulation.interface";
+import { BaseSimulationEngine } from "./base-simulation.engine";
 
 export class PopulationSimulationEngine extends BaseSimulationEngine {
+	protected override readonly configuration: PopulationSimulationConfiguration;
 	private simulation: ActiveSimulation;
 	private _locusAlleleIndices: Map<Locus["id"], Map<Allele["id"], number>> =
 		new Map();
 	private _locusAlleleFrequencies: Map<Locus["id"], Float64Array> = new Map();
 
-	constructor(protected configuration: PopulationSimulationConfiguration) {
+	constructor(configuration: PopulationSimulationConfiguration) {
 		super(configuration);
 		this.simulation = this._initializeSimulationState();
+		this.configuration = configuration;
 	}
 
 	private _initializeSimulationState(): ActiveSimulation {
@@ -113,7 +79,3 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
 		// placeholder
 	}
 }
-
-export type SimulationEngine =
-	| PopulationSimulationEngine
-	| IndividualSimulationEngine;

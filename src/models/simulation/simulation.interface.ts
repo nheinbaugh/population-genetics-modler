@@ -1,9 +1,5 @@
 import type { Locus } from "../core/locus.interface";
-
-export enum SimulationStrategy {
-	Population = "population",
-	Individual = "individual",
-}
+import type { SimulationStrategy } from "./simulation-strategy.enum";
 
 interface BaseSimulationConfiguration {
 	initialPopulationSize: number;
@@ -22,13 +18,13 @@ interface BaseSimulationConfiguration {
  */
 export interface PopulationSimulationConfiguration
 	extends BaseSimulationConfiguration {
-	strategy: SimulationStrategy.Population;
+	strategy: "population";
 }
 
 /** A currently unsupported way of tracking individuals within the population */
 export interface IndividualSimulationConfiguration
 	extends BaseSimulationConfiguration {
-	strategy: SimulationStrategy.Individual;
+	strategy: "individual";
 	genderDistribution: {
 		male: number;
 		female: number;
