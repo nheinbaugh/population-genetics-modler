@@ -1,16 +1,18 @@
 {
-  "name": "population-genetics-modler",
-  "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "Nick Heinbaugh",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
-  }
+	"name": "population-genetics-modler",
+	"version": "1.0.0",
+	"description": "",
+	"license": "ISC",
+	"author": "Nick Heinbaugh",
+	"type": "commonjs",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"tui": "ts-node src/tui-sandbox/index.ts"
+	},
+	"devDependencies": {
+		"ts-node": "^10.9.2",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.7"
+	}
 }

@@ -20,10 +20,10 @@ describe("validateSimulationConfiguration", () => {
 					label: "Basic Allele",
 					mutationMatrix: [
 						{
-							sourceAlleleId: "allele|a",
+							fromAlleleId: "allele|a",
 							mutationRates: [
 								{
-									mutatedAlleleId: "allele|b",
+									toAlleleId: "allele|b",
 									rateOfMutation: 0.2,
 								},
 							],
@@ -177,10 +177,10 @@ describe("validateSimulationConfiguration", () => {
 					label: "Basic Allele",
 					mutationMatrix: [
 						{
-							sourceAlleleId: "allele|invalid",
+							fromAlleleId: "allele|invalid",
 							mutationRates: [
 								{
-									mutatedAlleleId: "allele|b",
+									toAlleleId: "allele|b",
 									rateOfMutation: 0.2,
 								},
 							],
@@ -215,10 +215,10 @@ describe("validateSimulationConfiguration", () => {
 					label: "Basic Allele",
 					mutationMatrix: [
 						{
-							sourceAlleleId: "allele|a",
+							fromAlleleId: "allele|a",
 							mutationRates: [
 								{
-									mutatedAlleleId: "allele|invalid",
+									toAlleleId: "allele|invalid",
 									rateOfMutation: 0.2,
 								},
 							],
@@ -253,10 +253,10 @@ describe("validateSimulationConfiguration", () => {
 					label: "Basic Allele",
 					mutationMatrix: [
 						{
-							sourceAlleleId: "allele|a",
+							fromAlleleId: "allele|a",
 							mutationRates: [
 								{
-									mutatedAlleleId: "allele|b",
+									toAlleleId: "allele|b",
 									rateOfMutation: -0.2,
 								},
 							],

@@ -6,23 +6,30 @@ import type {
 	LocusSnapshot,
 } from "../../models/simulation/active-simulation.interface";
 import type { PopulationSimulationConfiguration } from "../../models/simulation/simulation.interface";
+import { resolveNaturalSelection } from "../resolve-natural-selection.functions";
 import { BaseSimulationEngine } from "./base-simulation.engine";
 
 export class PopulationSimulationEngine extends BaseSimulationEngine {
 	protected override readonly configuration: PopulationSimulationConfiguration;
-	private simulation: ActiveSimulation;
+
+	// This has the frequency of each allele in a given locus, but it's a flat array of just values for each locus
+	private _locusAlleleFrequencies: Map<Locus["id"], Float64Array> = new Map();
+
+	// we use this to know which index item in the _locusAlleleFrequencies map corresponds to a given allele
+	// this means that our worst case is a O(2) to grab the frequency.
 	private _locusAlleleIndices: Map<Locus["id"], Map<Allele["id"], number>> =
 		new Map();
-	private _locusAlleleFrequencies: Map<Locus["id"], Float64Array> = new Map();
 
 	constructor(configuration: PopulationSimulationConfiguration) {
 		super(configuration);
-		this.simulation = this._initializeSimulationState();
 		this.configuration = configuration;
+		this.simulation = this._initializeSimulationState(configuration);
 	}
 
-	private _initializeSimulationState(): ActiveSimulation {
-		this.configuration.modeledLoci.forEach((locus) => {
+	private _initializeSimulationState(
+		configuration: PopulationSimulationConfiguration,
+	): ActiveSimulation {
+		configuration.modeledLoci.forEach((locus) => {
 			const alleleToIndexMap = new Map<Allele["id"], number>();
 			const alleleFrequencies = new Float64Array(locus.alleles.length);
 
@@ -76,6 +83,27 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
 	}
 
 	proceedToNextGeneration(): void {
-		// placeholder
+		for (const locus of this.configuration.modeledLoci) {
+			const alleleFrequencies = this._locusAlleleFrequencies.get(locus.id);
+			const alleleToIndexMap = this._locusAlleleIndices.get(locus.id);
+
+			if (!alleleFrequencies || !alleleToIndexMap) {
+				throw new Error(`Unable to find allele data for Locus ${locus.label}`);
+			}
+			// account for natural selection by multiplying frequency by fitness
+			// normalize the new frequencies to add up to 1
+			const breedingPopulationRates = resolveNaturalSelection(
+				locus,
+				alleleFrequencies,
+				alleleToIndexMap,
+			);
+		}
+
+		//
+		// at this point we model the population
+		// assuming they are diploid we double the population size (cuz each new child got an allele from their parent)
+		// we then randomly assign each new child an allele based on the frequencies of the alleles in the population
+		// this will give us a new distribution of alleles in the population
+		// we then convert population count number back into frequencies to generate a new snapshot
 	}
 }
