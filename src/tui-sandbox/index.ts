@@ -1,12 +1,11 @@
 import { simulationEngineFactory } from "../engine/population-simulation.factory";
 import type { SimulationConfiguration } from "../models/simulation/simulation.interface";
 
-console.log("hello world!, how are you doing?");
 const configuration: SimulationConfiguration = {
 	isPopulationSizeStatic: true,
-	initialPopulationSize: 200,
+	initialPopulationSize: 2000,
 	strategy: "population",
-	generations: 10,
+	generations: 100,
 	modeledLoci: [
 		{
 			id: "locus|a",
@@ -17,7 +16,7 @@ const configuration: SimulationConfiguration = {
 					mutationRates: [
 						{
 							toAlleleId: "allele|b",
-							rateOfMutation: 0.05,
+							rateOfMutation: 0.25,
 						},
 					],
 				},
@@ -36,7 +35,7 @@ const configuration: SimulationConfiguration = {
 					id: "allele|a",
 					label: "a",
 					initialFrequency: 0.8,
-					fitnessModifier: 1,
+					fitnessModifier: 1.5,
 				},
 				{
 					id: "allele|b",
@@ -52,3 +51,12 @@ const configuration: SimulationConfiguration = {
 const simulation = simulationEngineFactory(configuration);
 const state = simulation.simulationState;
 console.log(JSON.stringify(state));
+console.log("Running simulation");
+console.log(
+	"current generation number: ",
+	simulation.simulationState.currentState.generationNumber,
+);
+for (let i = 0; i < configuration.generations; i++) {
+	simulation.proceedToNextGeneration();
+}
+console.log(JSON.stringify(simulation.simulationState.currentState));
