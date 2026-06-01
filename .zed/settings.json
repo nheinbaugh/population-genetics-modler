@@ -1,0 +1,7 @@
+{
+  "override_lsp_formatters": ["biome"],
+  "format_on_save": {
+    "enabled": true,
+    "lsp_timeout_ms": 5000
+  }
+}
