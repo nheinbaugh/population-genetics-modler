@@ -67,21 +67,22 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
 		if (!alleleFrequencies || !alleleToIndexMap) {
 			throw new Error(`Unable to find allele data for Locus ${locus.label}`);
 		}
-		// account for natural selection by multiplying frequency by fitness
-		// normalize the new frequencies to add up to 1
+
+		// account for natrual selection against the current generation.
 		const breedingPopulationRates = resolveNaturalSelection(
 			locus,
 			alleleFrequencies,
 			alleleToIndexMap,
 		);
 
-		// account for mutations
+		// account for mutations as the alleles are passed from the current generation to the next generation
 		const postMutationFrequencies = handleLocusMutations(
 			breedingPopulationRates,
 			locus,
 			alleleToIndexMap,
 		);
 
+		// use the updated frequencies to determine the makeup of the next generation
 		const alleleDistribution = generateNextGenerationAlleleFrequencies(
 			postMutationFrequencies,
 			alleleToIndexMap,
