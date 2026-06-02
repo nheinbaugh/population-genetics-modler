@@ -106,7 +106,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
     };
 
     return {
-      previousGenerations: [currentGeneration],
+      previousGenerations: [],
       currentState: currentGeneration,
       configuration: this.configuration,
     };
