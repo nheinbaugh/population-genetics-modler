@@ -1,7 +1,6 @@
+import { EPSILON } from "../../models/core/epsilon.const";
 import type { Locus } from "../../models/core/locus.interface";
 import { ConfigurationValidationError } from "./configuration-validation.error";
-
-const EPSILON = 1e-6;
 
 export function validateLocusFrequencies(modeledLoci: Locus[]): void {
   modeledLoci.forEach((locus) => {

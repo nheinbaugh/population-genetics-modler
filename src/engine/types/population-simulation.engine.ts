@@ -8,6 +8,7 @@ import type {
 import type { PopulationSimulationConfiguration } from "../../models/simulation/simulation.interface";
 import { generateNextGenerationAlleleFrequencies } from "../generate-next-generation-allele-frequencies.functions";
 import { handleLocusMutations } from "../handle-locus-mutation.functions";
+import { isLocusFixed } from "../is-locus-fixed.functions";
 import { resolveNaturalSelection } from "../resolve-natural-selection.functions";
 import { BaseSimulationEngine } from "./base-simulation.engine";
 import { createLocusAlleleData } from "./locus-allele-data.factory";
@@ -73,7 +74,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
     return {
       locusId: locus.id,
       alleleDistribution,
-      isLocusFixed: false,
+      isLocusFixed: isLocusFixed(alleleDistribution),
     };
   }
 
@@ -94,7 +95,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
       const currentLocusSnapshot: LocusSnapshot = {
         locusId: locus.id,
         alleleDistribution,
-        isLocusFixed: false, // This will be calculated later
+        isLocusFixed: isLocusFixed(alleleDistribution),
       };
       lociSnapshots[locus.id] = currentLocusSnapshot;
     });
