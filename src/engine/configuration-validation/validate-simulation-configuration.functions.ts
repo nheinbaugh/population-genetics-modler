@@ -4,9 +4,9 @@ import { validateLocusFrequencies } from "./validate-locus-frequencies.functions
 import { validateMutationAlleleIds } from "./validate-locus-mutation-matrix.functions";
 
 export function validateSimulationConfiguration(
-	configuration: SimulationConfiguration,
+  configuration: SimulationConfiguration,
 ): void {
   validateLociExistence(configuration.modeledLoci);
-	validateLocusFrequencies(configuration.modeledLoci);
-	validateMutationAlleleIds(configuration.modeledLoci);
+  validateLocusFrequencies(configuration.modeledLoci);
+  validateMutationAlleleIds(configuration.modeledLoci);
 }

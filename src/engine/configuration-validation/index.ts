@@ -1,1 +1,1 @@
-export * from './validate-simulation-configuration.functions';
+export * from "./validate-simulation-configuration.functions";

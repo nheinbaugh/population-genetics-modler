@@ -1,7 +1,7 @@
 export const SimulationStrategy = {
-	Population: "population",
-	Individual: "individual",
+  Population: "population",
+  Individual: "individual",
 } as const;
 
 export type SimulationStrategy =
-	(typeof SimulationStrategy)[keyof typeof SimulationStrategy];
+  (typeof SimulationStrategy)[keyof typeof SimulationStrategy];

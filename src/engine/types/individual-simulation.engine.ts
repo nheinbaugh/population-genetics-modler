@@ -2,11 +2,13 @@ import type { IndividualSimulationConfiguration } from "../../models/simulation/
 import { BaseSimulationEngine } from "./base-simulation.engine";
 
 export class IndividualSimulationEngine extends BaseSimulationEngine {
-	protected override readonly configuration: IndividualSimulationConfiguration;
-	constructor(configuration: IndividualSimulationConfiguration) {
-		super(configuration);
-		this.configuration = configuration;
-	}
+  protected override readonly configuration: IndividualSimulationConfiguration;
+  constructor(configuration: IndividualSimulationConfiguration) {
+    super(configuration);
+    this.configuration = configuration;
+  }
 
-	proceedToNextGeneration(): void {}
+  proceedToNextGeneration(): void {
+    throw new Error("Method not implemented.");
+  }
 }

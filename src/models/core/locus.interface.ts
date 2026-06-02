@@ -7,8 +7,8 @@ import type { AlleleMutationConfiguration } from "./allele-mutation-configuratio
  * The sum of all alleleFrequency of the all Alleles in a Locus must be 1
  */
 export interface Locus {
-	id: string;
-	label: string;
-	alleles: Allele[];
-	mutationMatrix: AlleleMutationConfiguration[];
+  id: string;
+  label: string;
+  alleles: Allele[];
+  mutationMatrix: AlleleMutationConfiguration[];
 }
