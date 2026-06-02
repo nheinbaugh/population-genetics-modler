@@ -9,18 +9,14 @@ import type { PopulationSimulationConfiguration } from "../../models/simulation/
 import { generateNextGenerationAlleleFrequencies } from "../generate-next-generation-allele-frequencies.functions";
 import { handleLocusMutations } from "../handle-locus-mutation.functions";
 import { resolveNaturalSelection } from "../resolve-natural-selection.functions";
-import type { AlleleIndexMap } from "./allele-index-map";
 import { BaseSimulationEngine } from "./base-simulation.engine";
+import { createLocusAlleleData } from "./locus-allele-data.factory";
+import type { LocusAlleleData } from "./locus-allele-data.interface";
 
 export class PopulationSimulationEngine extends BaseSimulationEngine {
   protected override readonly configuration: PopulationSimulationConfiguration;
 
-  // This has the frequency of each allele in a given locus, but it's a flat array of just values for each locus
-  private _locusAlleleFrequencies: Map<Locus["id"], Float64Array> = new Map();
-
-  // we use this to know which index item in the _locusAlleleFrequencies map corresponds to a given allele
-  // this means that our worst case is a O(2) to grab the frequency.
-  private _locusAlleleIndices: Map<Locus["id"], AlleleIndexMap> = new Map();
+  private locusData: Map<Locus["id"], LocusAlleleData> = new Map();
 
   constructor(configuration: PopulationSimulationConfiguration) {
     super(configuration);
@@ -32,16 +28,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
     configuration: PopulationSimulationConfiguration,
   ): ActiveSimulation {
     configuration.modeledLoci.forEach((locus) => {
-      const alleleToIndexMap: AlleleIndexMap = new Map<Allele["id"], number>();
-      const alleleFrequencies = new Float64Array(locus.alleles.length);
-
-      locus.alleles.forEach((allele, index) => {
-        alleleToIndexMap.set(allele.id, index);
-        alleleFrequencies[index] = allele.initialFrequency;
-      });
-
-      this._locusAlleleIndices.set(locus.id, alleleToIndexMap);
-      this._locusAlleleFrequencies.set(locus.id, alleleFrequencies);
+      this.locusData.set(locus.id, createLocusAlleleData(locus));
     });
 
     return this._createGenerationSnapshot(0);
@@ -61,31 +48,25 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
   }
 
   private evolveLocus(locus: Locus): LocusSnapshot {
-    const alleleFrequencies = this._locusAlleleFrequencies.get(locus.id);
-    const alleleToIndexMap = this._locusAlleleIndices.get(locus.id);
-
-    if (!alleleFrequencies || !alleleToIndexMap) {
+    const alleleData = this.locusData.get(locus.id);
+    if (!alleleData) {
       throw new Error(`Unable to find allele data for Locus ${locus.label}`);
     }
 
     // account for natrual selection against the current generation.
-    const breedingPopulationRates = resolveNaturalSelection(
-      locus,
-      alleleFrequencies,
-      alleleToIndexMap,
-    );
+    const breedingPopulationRates = resolveNaturalSelection(locus, alleleData);
 
     // account for mutations as the alleles are passed from the current generation to the next generation
     const postMutationFrequencies = handleLocusMutations(
       breedingPopulationRates,
       locus,
-      alleleToIndexMap,
+      alleleData.indicies,
     );
 
     // use the updated frequencies to determine the makeup of the next generation
     const alleleDistribution = generateNextGenerationAlleleFrequencies(
       postMutationFrequencies,
-      alleleToIndexMap,
+      alleleData.indicies,
       this.simulationState.currentState.populationSize,
     );
 
@@ -102,14 +83,12 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
     const lociSnapshots: GenerationSnapshot["lociSnapshots"] = {};
     this.configuration.modeledLoci.forEach((locus) => {
       const alleleDistribution: Record<Allele["id"], number> = {};
-      const alleleFrequencies = this._locusAlleleFrequencies.get(locus.id);
-      const alleleToIndexMap = this._locusAlleleIndices.get(locus.id);
-
-      if (!alleleFrequencies || !alleleToIndexMap) {
+      const alleleData = this.locusData.get(locus.id);
+      if (!alleleData) {
         throw new Error(`Unable to find allele data for Locus ${locus.label}`);
       }
-      alleleToIndexMap.forEach((index, alleleId) => {
-        alleleDistribution[alleleId] = alleleFrequencies[index];
+      alleleData.indicies.forEach((index, alleleId) => {
+        alleleDistribution[alleleId] = alleleData.frequencies[index];
       });
 
       const currentLocusSnapshot: LocusSnapshot = {

@@ -38,7 +38,10 @@ describe("resolveNaturalSelection", () => {
     const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
-    const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
+    const result = resolveNaturalSelection(locus, {
+      frequencies: alleleFrequencies,
+      indicies: indexMap,
+    });
     expect(alleleFrequencies[1]).toBeGreaterThan(result[1]);
     expect(alleleFrequencies[0]).toBeLessThan(result[0]);
   });
@@ -77,7 +80,10 @@ describe("resolveNaturalSelection", () => {
       .set("allele|a", 0)
       .set("allele|b", 1);
 
-    const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
+    const result = resolveNaturalSelection(locus, {
+      frequencies: alleleFrequencies,
+      indicies: indexMap,
+    });
     expect(result).toEqual(alleleFrequencies);
   });
 
@@ -116,7 +122,10 @@ describe("resolveNaturalSelection", () => {
     const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
-    const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
+    const result = resolveNaturalSelection(locus, {
+      frequencies: alleleFrequencies,
+      indicies: indexMap,
+    });
     expect(alleleFrequencies[0]).toBeGreaterThan(result[0]);
     expect(alleleFrequencies[1]).toBeLessThan(result[1]);
     expect(result.reduce((sum, freq) => sum + freq, 0)).toBeCloseTo(1);
@@ -156,7 +165,10 @@ describe("resolveNaturalSelection", () => {
     const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
-    const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
+    const result = resolveNaturalSelection(locus, {
+      frequencies: alleleFrequencies,
+      indicies: indexMap,
+    });
     expect(alleleFrequencies[0]).toBeGreaterThan(result[0]);
     expect(alleleFrequencies[1]).toBeLessThan(result[1]);
   });
@@ -196,7 +208,10 @@ describe("resolveNaturalSelection", () => {
       .set("allele|a", 0)
       .set("allele|b", 1);
 
-    const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
+    const result = resolveNaturalSelection(locus, {
+      frequencies: alleleFrequencies,
+      indicies: indexMap,
+    });
 
     expect(result.reduce((sum, freq) => sum + freq, 0)).toBeCloseTo(1);
     expect(alleleFrequencies[0]).not.toEqual(result[0]);
@@ -238,7 +253,10 @@ describe("resolveNaturalSelection", () => {
       .set("allele|b", 1);
 
     expect(() =>
-      resolveNaturalSelection(locus, alleleFrequencies, indexMap),
+      resolveNaturalSelection(locus, {
+        frequencies: alleleFrequencies,
+        indicies: indexMap,
+      }),
     ).toThrow();
   });
 });

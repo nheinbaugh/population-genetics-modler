@@ -1,4 +1,5 @@
 import type { Locus } from "../models/core/locus.interface";
+import type { LocusAlleleData } from "./types/locus-allele-data.interface";
 
 /**
  * This function simulates natural selection acting against a given locus throughout the population.
@@ -10,18 +11,17 @@ import type { Locus } from "../models/core/locus.interface";
  */
 export function resolveNaturalSelection(
   locus: Locus,
-  alleleFrequencies: Float64Array,
-  alleleToIndexMap: AlleleIndexMap,
+  { frequencies, indicies }: LocusAlleleData,
 ): Float64Array {
   // ensure that when we map this out that the frequency array is sorted in the same order as the incoming frequency map
   const fitnessValues = new Float32Array(locus.alleles.length);
   for (const allele of locus.alleles) {
-    const targetIndex = alleleToIndexMap.get(allele.id);
+    const targetIndex = indicies.get(allele.id);
     if (targetIndex !== undefined) {
       fitnessValues[targetIndex] = allele.fitnessModifier;
     }
   }
-  const totalFitness = alleleFrequencies.reduce(
+  const totalFitness = frequencies.reduce(
     (total, freq, index) => total + freq * fitnessValues[index],
     0,
   );
@@ -32,10 +32,9 @@ export function resolveNaturalSelection(
       `Total fitness is zero for locus ${locus.label}. Cannot apply natural selection.`,
     );
   }
-  const updatedFrequencies = new Float64Array(alleleFrequencies.length);
-  for (let i = 0; i < alleleFrequencies.length; i++) {
-    updatedFrequencies[i] =
-      (alleleFrequencies[i] * fitnessValues[i]) / totalFitness;
+  const updatedFrequencies = new Float64Array(frequencies.length);
+  for (let i = 0; i < frequencies.length; i++) {
+    updatedFrequencies[i] = (frequencies[i] * fitnessValues[i]) / totalFitness;
   }
   return updatedFrequencies;
 }
