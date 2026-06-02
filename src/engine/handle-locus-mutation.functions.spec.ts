@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { Allele } from "../models/core/allele.interface";
 import { handleLocusMutations } from "./handle-locus-mutation.functions";
+import type { AlleleIndexMap } from "./types/allele-index-map";
 
 describe("handleLocusMutation", () => {
   test("should return the original frequencies if the mutation rates are all zero", () => {
@@ -44,7 +44,7 @@ describe("handleLocusMutation", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
 
@@ -93,7 +93,7 @@ describe("handleLocusMutation", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
 
@@ -142,7 +142,7 @@ describe("handleLocusMutation", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
 
@@ -193,7 +193,7 @@ describe("handleLocusMutation", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
     const result = handleLocusMutations(alleleFrequencies, locus, indexMap);
@@ -256,7 +256,7 @@ describe("handleLocusMutation", () => {
     };
 
     const alleleFrequencies = new Float64Array([0.2, 0.2, 0.6]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1)
       .set("allele|c", 2);
@@ -306,7 +306,7 @@ describe("handleLocusMutation", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
     const result = handleLocusMutations(alleleFrequencies, locus, indexMap);

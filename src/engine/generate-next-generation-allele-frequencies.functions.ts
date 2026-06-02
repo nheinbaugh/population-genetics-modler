@@ -1,4 +1,5 @@
 import type { Allele } from "../models/core/allele.interface";
+import type { AlleleIndexMap } from "./types/allele-index-map";
 
 function generateLocusCdf(alleleFrequencies: Float64Array): Float64Array {
   const cumulativeFrequencies = new Float64Array(alleleFrequencies.length);
@@ -18,7 +19,7 @@ function generateLocusCdf(alleleFrequencies: Float64Array): Float64Array {
  */
 export function generateNextGenerationAlleleFrequencies(
   postMutationFrequencies: Float64Array,
-  alleleToIndexMap: Map<Allele["id"], number>,
+  alleleToIndexMap: AlleleIndexMap,
   populationSize: number,
 ): Record<Allele["id"], number> {
   // at this point we model the population

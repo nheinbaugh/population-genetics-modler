@@ -9,6 +9,7 @@ import type { PopulationSimulationConfiguration } from "../../models/simulation/
 import { generateNextGenerationAlleleFrequencies } from "../generate-next-generation-allele-frequencies.functions";
 import { handleLocusMutations } from "../handle-locus-mutation.functions";
 import { resolveNaturalSelection } from "../resolve-natural-selection.functions";
+import type { AlleleIndexMap } from "./allele-index-map";
 import { BaseSimulationEngine } from "./base-simulation.engine";
 
 export class PopulationSimulationEngine extends BaseSimulationEngine {
@@ -19,8 +20,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
 
   // we use this to know which index item in the _locusAlleleFrequencies map corresponds to a given allele
   // this means that our worst case is a O(2) to grab the frequency.
-  private _locusAlleleIndices: Map<Locus["id"], Map<Allele["id"], number>> =
-    new Map();
+  private _locusAlleleIndices: Map<Locus["id"], AlleleIndexMap> = new Map();
 
   constructor(configuration: PopulationSimulationConfiguration) {
     super(configuration);
@@ -32,7 +32,7 @@ export class PopulationSimulationEngine extends BaseSimulationEngine {
     configuration: PopulationSimulationConfiguration,
   ): ActiveSimulation {
     configuration.modeledLoci.forEach((locus) => {
-      const alleleToIndexMap = new Map<Allele["id"], number>();
+      const alleleToIndexMap: AlleleIndexMap = new Map<Allele["id"], number>();
       const alleleFrequencies = new Float64Array(locus.alleles.length);
 
       locus.alleles.forEach((allele, index) => {

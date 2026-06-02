@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { Allele } from "../models/core/allele.interface";
 import { resolveNaturalSelection } from "./resolve-natural-selection.functions";
+import type { AlleleIndexMap } from "./types/allele-index-map";
 
 describe("resolveNaturalSelection", () => {
   test("should correctly handle when alleles are not ordered in the frequency array", () => {
@@ -35,7 +35,7 @@ describe("resolveNaturalSelection", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.2, 0.8]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 1)
       .set("allele|b", 0);
     const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
@@ -73,7 +73,7 @@ describe("resolveNaturalSelection", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.5, 0.5]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
 
@@ -113,7 +113,7 @@ describe("resolveNaturalSelection", () => {
     };
 
     const alleleFrequencies = new Float64Array([0.4, 0.6]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
     const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
@@ -153,7 +153,7 @@ describe("resolveNaturalSelection", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.5, 0.5]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
     const result = resolveNaturalSelection(locus, alleleFrequencies, indexMap);
@@ -192,7 +192,7 @@ describe("resolveNaturalSelection", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.5, 0.5]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
 
@@ -233,7 +233,7 @@ describe("resolveNaturalSelection", () => {
       ],
     };
     const alleleFrequencies = new Float64Array([0.5, 0.5]);
-    const indexMap: Map<Allele["id"], number> = new Map()
+    const indexMap: AlleleIndexMap = new Map()
       .set("allele|a", 0)
       .set("allele|b", 1);
 

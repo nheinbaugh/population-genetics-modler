@@ -1,12 +1,13 @@
 import type { Allele } from "../models/core/allele.interface";
 import type { Locus } from "../models/core/locus.interface";
+import type { AlleleIndexMap } from "./types/allele-index-map";
 
 function handleAlleleMutation(
   originalFrequencies: Float64Array,
   updatedFrequencies: Float64Array,
   allele: Allele,
   locus: Locus,
-  alleleToIndexMap: Map<Allele["id"], number>,
+  alleleToIndexMap: AlleleIndexMap,
 ): Float64Array {
   const alleleIndex = alleleToIndexMap.get(allele.id);
   if (alleleIndex === undefined) {
@@ -44,7 +45,7 @@ function handleAlleleMutation(
 export function handleLocusMutations(
   currentFrequencies: Float64Array,
   locus: Locus,
-  alleleToIndexMap: Map<Allele["id"], number>,
+  alleleToIndexMap: AlleleIndexMap,
 ): Float64Array {
   const updatedFrequencies = new Float64Array(currentFrequencies.length);
   // set the updated frequency baseline to be the pre-mutation frequency.

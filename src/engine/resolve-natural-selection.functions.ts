@@ -1,4 +1,3 @@
-import type { Allele } from "../models/core/allele.interface";
 import type { Locus } from "../models/core/locus.interface";
 
 /**
@@ -12,7 +11,7 @@ import type { Locus } from "../models/core/locus.interface";
 export function resolveNaturalSelection(
   locus: Locus,
   alleleFrequencies: Float64Array,
-  alleleToIndexMap: Map<Allele["id"], number>,
+  alleleToIndexMap: AlleleIndexMap,
 ): Float64Array {
   // ensure that when we map this out that the frequency array is sorted in the same order as the incoming frequency map
   const fitnessValues = new Float32Array(locus.alleles.length);
